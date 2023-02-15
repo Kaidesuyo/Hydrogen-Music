@@ -12,6 +12,8 @@
     "dist": "vite build && electron-builder -p always"
   },
   "dependencies": {
+    "NeteaseCloudMusicApi": "^4.8.9",
+    "ant-design-vue": "^3.2.15",
     "axios": "^1.2.0",
     "dayjs": "^1.11.6",
     "electron-store": "^8.1.0",
@@ -23,7 +25,6 @@
     "js-md5": "^0.7.3",
     "music-metadata": "^7.13.0",
     "nanoid": "^3.3.4",
-    "NeteaseCloudMusicApi": "^4.8.9",
     "normalize.css": "^8.0.1",
     "pinia": "^2.0.23",
     "pinia-plugin-persistedstate": "^3.0.1",
@@ -59,7 +60,11 @@
     },
     "win": {
       "icon": "./src/assets/icon/icon.ico",
-      "target": ["nsis","portable","zip"],
+      "target": [
+        "nsis",
+        "portable",
+        "zip"
+      ],
       "verifyUpdateCodeSignature": false
     },
     "linux": {},
@@ -71,6 +76,5 @@
         "releaseType": "draft"
       }
     ]
-    
   }
 }

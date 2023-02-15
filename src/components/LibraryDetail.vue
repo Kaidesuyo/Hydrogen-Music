@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, computed, onActivated } from 'vue'
+  import { ref, computed, onActivated, watchEffect } from 'vue'
   import { onBeforeRouteLeave, onBeforeRouteUpdate, useRouter } from 'vue-router';
   import { isLogin } from '../utils/authority' 
   import { noticeOpen } from '../utils/dialog';
@@ -27,7 +27,17 @@
   const isSinger = ref(false)
   const isSongList = ref(false)
   const introduceDetailShow = ref(false)
+  const introduceDetailShowDelay = ref(false)
 
+  watchEffect(() => {
+    if (introduceDetailShow.value) {
+      setTimeout(() => {
+        introduceDetailShowDelay.value = true
+      }, 600);
+    } else {
+      introduceDetailShowDelay.value = false
+    }
+  })
   libraryTypeCheck(router.currentRoute.value.name)
 
   onBeforeRouteLeave((to, from, next) => {
@@ -242,18 +252,20 @@
         <div class="introduce-1" v-if="libraryInfo.follow">{{libraryInfo.follow.fansCnt}} 已关注</div>
         <div class="introduce-2" @click="introduceDetailShow = !introduceDetailShow">查看详情</div>
       </div>
-      <div class="introduce-detail-text" v-if="introduceDetailShow">
-        <div class="detail-text">
-          <p class="text">{{libraryInfo.description || libraryInfo.briefDesc || "暂无描述"}}</p>
+      <transition name="metro">
+        <div class="introduce-detail-text" :class="{'introduce-detail-text-active':introduceDetailShowDelay}" v-if="introduceDetailShow">
+          <div class="detail-text">
+            <p class="text">{{libraryInfo.description || libraryInfo.briefDesc || "暂无描述"}}</p>
+          </div>
+          <div class="text-close" @click="introduceDetailShow = false">
+            <svg t="1671966797621" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1965" width="200" height="200"><path d="M576 512l277.333333 277.333333-64 64-277.333333-277.333333L234.666667 853.333333 170.666667 789.333333l277.333333-277.333333L170.666667 234.666667 234.666667 170.666667l277.333333 277.333333L789.333333 170.666667 853.333333 234.666667 576 512z" fill="#ffffff" p-id="1966"></path></svg>
+          </div>
+          <span class="dialog-style dialog-style1"></span>
+          <span class="dialog-style dialog-style2"></span>
+          <span class="dialog-style dialog-style3"></span>
+          <span class="dialog-style dialog-style4"></span>
         </div>
-        <div class="text-close" @click="introduceDetailShow = false">
-          <svg t="1671966797621" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1965" width="200" height="200"><path d="M576 512l277.333333 277.333333-64 64-277.333333-277.333333L234.666667 853.333333 170.666667 789.333333l277.333333-277.333333L170.666667 234.666667 234.666667 170.666667l277.333333 277.333333L789.333333 170.666667 853.333333 234.666667 576 512z" fill="#ffffff" p-id="1966"></path></svg>
-        </div>
-        <span class="dialog-style dialog-style1"></span>
-        <span class="dialog-style dialog-style2"></span>
-        <span class="dialog-style dialog-style3"></span>
-        <span class="dialog-style dialog-style4"></span>
-      </div>
+      </transition>
     </div>
 
     <div class="library-option">
@@ -435,11 +447,8 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        animation: introduce-detail-in 0.6s 0.3s forwards;
-        @keyframes introduce-detail-in {
-          0%{width: 0;height: 0;}
-          50%{width: 700Px;height: 0;padding: 0 60Px;}
-          100%{width: 700Px;height: 400Px;padding: 30PX 60Px;}
+        &-active {
+          width: 700Px;height: 400Px;padding: 30PX 60Px;
         }
         .detail-text{
           width: 100%;
@@ -594,4 +603,23 @@
       height: calc(100% - 198Px);
     }
   }
+</style>
+
+<style lang="scss">
+
+.metro-enter-active {
+  animation: introduce-detail-in 0.6s 0.3s forwards;
+}
+.metro-leave-active {
+  animation: introduce-detail-in 0.6s 0.1s reverse;
+  .text-close {
+    display: none;
+  }
+}
+@keyframes introduce-detail-in {
+  0%{width: 0;height: 0;padding: 0;}
+  50%{width: 700Px;height: 0;padding: 0 60Px;}
+  100%{width: 700Px;height: 400Px;padding: 30PX 60Px;}
+}
+
 </style>

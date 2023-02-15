@@ -59,3 +59,26 @@ button:focus-visible {
 #app {
   text-align: center;
 }
+.ant-select-dropdown {
+  background-color: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(12px);
+  .ant-select-item-option {
+    margin-right: 1px;
+    background-position: -200px 0px;
+    background-image: linear-gradient(90deg, rgba(0,0,0,.85), rgba(0,0,0,.85));
+    transition: background-position .3s, color .3s;
+    background-repeat: repeat-y;
+
+    &:hover {
+      background-position: 0 0;
+      color: white;
+    }
+    &-active {
+      background-color: transparent;
+    }
+    &-selected {
+      background-color: black;
+      color: white;
+    }
+  }
+}
